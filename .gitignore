@@ -1,0 +1,30 @@
+# Datasets
+dataset/
+data/
+train.txt
+test.txt
+val.txt
+
+# Model outputs
+outputs/
+tuning_results/
+*.pth
+
+# Uploads
+uploads/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/

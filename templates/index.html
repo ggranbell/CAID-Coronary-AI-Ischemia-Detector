@@ -5,618 +5,573 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAID — Coronary AI Ischemia Detector</title>
     <meta name="description" content="AI-powered coronary ischemia detection from angiography images using ConvNeXt V2 deep learning.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0e1a;
-            --bg-secondary: #111827;
-            --bg-card: rgba(17, 24, 39, 0.8);
-            --bg-glass: rgba(255, 255, 255, 0.05);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-red: #ef4444;
-            --accent-red-glow: rgba(239, 68, 68, 0.3);
-            --accent-blue: #3b82f6;
-            --accent-blue-glow: rgba(59, 130, 246, 0.3);
-            --accent-teal: #14b8a6;
-            --gradient-primary: linear-gradient(135deg, #ef4444, #3b82f6);
-            --gradient-card: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(59, 130, 246, 0.1));
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            --radius: 16px;
-            --radius-sm: 10px;
+            --primary: #C44E52;
+            --secondary: #4C72B0;
+            --accent: #14b8a6;
+            --background: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--background);
+            color: var(--text);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animated background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background:
-                radial-gradient(ellipse at 20% 50%, rgba(239, 68, 68, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 20%, rgba(20, 184, 166, 0.05) 0%, transparent 50%);
-            z-index: 0;
-            animation: bgShift 20s ease-in-out infinite alternate;
-        }
-
-        @keyframes bgShift {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-5%, -5%) rotate(3deg); }
+            background-image: radial-gradient(circle at 10% 20%, rgba(196, 78, 82, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(76, 114, 176, 0.1) 0%, transparent 40%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
         }
 
         .container {
-            position: relative;
-            z-index: 1;
             max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+            width: 100%;
         }
 
-        /* Header */
-        .header {
+        header {
             text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 1rem;
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--accent-teal);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .header-badge .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent-teal);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            margin-bottom: 3rem;
         }
 
         h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            background: var(--gradient-primary);
+            background: linear-gradient(to right, #f87171, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            font-weight: 400;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            transition: border-color 0.3s ease;
-        }
-
-        .card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .card-title {
+        p.subtitle {
+            color: var(--text-muted);
             font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        .card-title .icon {
-            font-size: 1.3rem;
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Upload zone */
-        .upload-zone {
-            border: 2px dashed rgba(255, 255, 255, 0.15);
-            border-radius: var(--radius-sm);
-            padding: 3rem 2rem;
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 3rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            background: rgba(15, 23, 42, 0.2);
         }
 
-        .upload-zone:hover,
-        .upload-zone.dragover {
-            border-color: var(--accent-blue);
-            background: rgba(59, 130, 246, 0.05);
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(196, 78, 82, 0.05);
         }
 
-        .upload-zone .upload-icon {
+        .upload-area.dragging {
+            border-color: var(--accent);
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .upload-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            opacity: 0.6;
+            display: block;
         }
 
-        .upload-zone p {
-            color: var(--text-secondary);
+        .upload-text {
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
-        .upload-zone .hint {
-            font-size: 0.8rem;
+        .upload-hint {
             color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        .upload-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Preview */
-        .preview-container {
+        #fileInput {
             display: none;
-            margin-top: 1.5rem;
         }
 
-        .preview-container.active {
-            display: block;
-        }
-
-        .preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-glass);
-            object-fit: contain;
-        }
-
-        /* Analyze button */
-        .btn-analyze {
-            display: none;
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: var(--gradient-primary);
-            color: white;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-analyze:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-analyze:active {
-            transform: translateY(0);
-        }
-
-        .btn-analyze.active {
-            display: block;
-        }
-
-        .btn-analyze:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Spinner */
-        .spinner {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .spinner.active {
-            display: block;
-        }
-
-        .spinner-ring {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--border-glass);
-            border-top-color: var(--accent-red);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Results */
-        .results-section {
+        /* Progress Bar Section */
+        #batchProgressSection {
             display: none;
             margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
 
-        .results-section.active {
-            display: block;
-            animation: fadeUp 0.5s ease;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Prediction result */
-        .prediction-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .prediction-badge.positive {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-        }
-
-        .prediction-badge.negative {
-            background: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #93c5fd;
-        }
-
-        /* Probability bars */
-        .prob-bar-container {
-            margin-bottom: 1rem;
-        }
-
-        .prob-label {
+        .progress-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.4rem;
-            font-size: 0.85rem;
-        }
-
-        .prob-label .name {
-            font-weight: 500;
-        }
-
-        .prob-label .value {
-            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
             font-weight: 600;
         }
 
-        .prob-track {
+        .progress-bar-container {
             height: 10px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 5px;
             overflow: hidden;
         }
 
-        .prob-fill {
+        .progress-bar-fill {
             height: 100%;
-            border-radius: 5px;
-            transition: width 1s ease;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
-        .prob-fill.negative {
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        /* Results Gallery */
+        #gallerySection {
+            display: none;
+            margin-top: 3rem;
         }
 
-        .prob-fill.positive {
-            background: linear-gradient(90deg, #ef4444, #f87171);
+        .gallery-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Image comparison grid */
-        .image-grid {
+        .results-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-card {
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .gallery-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(20, 184, 166, 0.3);
+        }
+
+        .gallery-thumb {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .gallery-info {
+            padding: 0.75rem;
+        }
+
+        .gallery-class {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .gallery-conf {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Detailed Results View */
+        #detailSection {
+            display: none;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .detail-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .results-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .image-grid .img-card {
-            text-align: center;
-        }
-
-        .image-grid .img-card img {
-            width: 100%;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-glass);
-        }
-
-        .image-grid .img-card .img-label {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* Error */
-        .error-msg {
-            display: none;
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: var(--radius-sm);
-            color: #fca5a5;
+            gap: 2rem;
             margin-top: 1rem;
         }
 
-        .error-msg.active {
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-image-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .result-image-card img {
+            width: 100%;
+            height: auto;
             display: block;
         }
 
-        /* Footer */
-        .footer {
+        .image-caption {
+            padding: 0.75rem;
             text-align: center;
-            margin-top: 3rem;
-            padding: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
             color: var(--text-muted);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--border-glass);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .image-grid { grid-template-columns: 1fr; }
-            .card { padding: 1.5rem; }
+        .prediction-summary {
+            background: rgba(196, 78, 82, 0.1);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .prediction-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .prediction-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .confidence-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+        }
+
+        .prob-bars {
+            margin-top: 2rem;
+        }
+
+        .prob-item {
+            margin-bottom: 1rem;
+        }
+
+        .prob-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .prob-bar-container {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease-out;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .loading-ring {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-badge">
-                <span class="dot"></span>
-                ConvNeXt V2 · Binary Classifier
-            </div>
-            <h1>CAID</h1>
-            <p class="subtitle">Coronary AI Ischemia Detector — Deep Learning Analysis of Coronary Angiography</p>
-        </div>
+        <header>
+            <h1>CAID — Coronary AI Ischemia Detector</h1>
+            <p class="subtitle">Batch Processing & Attention Visualization</p>
+        </header>
 
-        <!-- Upload Card -->
-        <div class="card" id="upload-card">
-            <div class="card-title">
-                <span class="icon">📤</span> Upload Coronary Angiography Image
+        <main class="main-card">
+            <div class="upload-area" id="dropZone">
+                <span class="upload-icon">🫀</span>
+                <div class="upload-text">Click to browse or drop images</div>
+                <div class="upload-hint">Supports batch upload of multiple coronary angiography images</div>
+                <input type="file" id="fileInput" accept="image/*" multiple>
             </div>
-            <div class="upload-zone" id="upload-zone">
-                <div class="upload-icon">🫀</div>
-                <p>Drop an image here or click to browse</p>
-                <p class="hint">Supports PNG, JPG, TIFF — Max 16 MB</p>
-                <input type="file" id="file-input" accept="image/*">
-            </div>
-            <div class="preview-container" id="preview-container">
-                <img id="preview-image" class="preview-image" alt="Preview">
-            </div>
-            <button class="btn-analyze" id="btn-analyze" onclick="analyze()">
-                🔬 Analyze Image
-            </button>
-            <div class="error-msg" id="error-msg"></div>
-        </div>
 
-        <!-- Spinner -->
-        <div class="spinner" id="spinner">
-            <div class="spinner-ring"></div>
-            <p style="color: var(--text-secondary);">Analyzing coronary angiography…</p>
-        </div>
-
-        <!-- Results -->
-        <div class="results-section" id="results-section">
-            <!-- Prediction -->
-            <div class="card" style="margin-bottom: 1.5rem;">
-                <div class="card-title">
-                    <span class="icon">🎯</span> Classification Result
+            <div id="batchProgressSection">
+                <div class="progress-header">
+                    <span id="progressStatus">Processing batch...</span>
+                    <span id="progressPercent">0%</span>
                 </div>
-                <div id="prediction-badge" class="prediction-badge"></div>
-
-                <div class="prob-bar-container">
-                    <div class="prob-label">
-                        <span class="name">Negative (No Ischemia)</span>
-                        <span class="value" id="prob-negative">—</span>
-                    </div>
-                    <div class="prob-track">
-                        <div class="prob-fill negative" id="bar-negative" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="prob-bar-container">
-                    <div class="prob-label">
-                        <span class="name">Positive (Ischemia Detected)</span>
-                        <span class="value" id="prob-positive">—</span>
-                    </div>
-                    <div class="prob-track">
-                        <div class="prob-fill positive" id="bar-positive" style="width: 0%"></div>
-                    </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="batchProgressBar"></div>
                 </div>
             </div>
 
-            <!-- Grad-CAM -->
-            <div class="card">
-                <div class="card-title">
-                    <span class="icon">🔥</span> Grad-CAM Attention Map
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
-                    Highlights regions the model focused on for its prediction. Warm colors indicate high attention.
-                </p>
-                <div class="image-grid">
-                    <div class="img-card">
-                        <img id="result-original" alt="Original Image">
-                        <div class="img-label">Original</div>
-                    </div>
-                    <div class="img-card">
-                        <img id="result-cam" alt="Grad-CAM Overlay">
-                        <div class="img-label">Grad-CAM Overlay</div>
-                    </div>
+            <div id="gallerySection">
+                <h2 class="gallery-title">Results Gallery <span id="galleryCount" style="color: var(--text-muted); font-size: 1rem; font-weight: 400;"></span></h2>
+                <div class="results-gallery" id="imageGallery">
+                    <!-- Cards will be injected here -->
                 </div>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            CAID — Coronary AI Ischemia Detector &middot; Powered by ConvNeXt V2 &middot; Academic Research Project
-        </div>
+            <div id="detailSection">
+                <div class="detail-header">
+                    <h2 class="detail-title">Sample Details: <span id="currentFileName" style="color: var(--primary);">--</span></h2>
+                    <button id="closeDetail" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem;">&times;</button>
+                </div>
+
+                <div class="prediction-summary">
+                    <div>
+                        <div class="prediction-label">Diagnosis</div>
+                        <div class="prediction-value" id="predClass">---</div>
+                    </div>
+                    <div class="confidence-badge" id="predConf">0%</div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-image-card">
+                        <img id="origImgPreview" src="" alt="Original View">
+                        <div class="image-caption">Coronary Angiography Raw View</div>
+                    </div>
+                    <div class="result-image-card">
+                        <img id="camImgPreview" src="" alt="Grad-CAM View">
+                        <div class="image-caption">Grad-CAM Attention Heatmap</div>
+                    </div>
+                </div>
+
+                <div class="prob-bars" id="probContainer">
+                    <!-- Probability bars will be injected here -->
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            &copy; 2026 CAID — Coronary AI Ischemia Detector &middot; Powered by ConvNeXt V2
+        </footer>
     </div>
 
     <script>
-        const uploadZone = document.getElementById('upload-zone');
-        const fileInput = document.getElementById('file-input');
-        const previewContainer = document.getElementById('preview-container');
-        const previewImage = document.getElementById('preview-image');
-        const btnAnalyze = document.getElementById('btn-analyze');
-        const spinner = document.getElementById('spinner');
-        const resultsSection = document.getElementById('results-section');
-        const errorMsg = document.getElementById('error-msg');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const batchProgressSection = document.getElementById('batchProgressSection');
+        const gallerySection = document.getElementById('gallerySection');
+        const detailSection = document.getElementById('detailSection');
+        const imageGallery = document.getElementById('imageGallery');
+        
+        const colors = ['#4C72B0', '#C44E52'];
+        let batchResults = [];
 
-        let selectedFile = null;
-
-        // Drag and drop
-        uploadZone.addEventListener('dragover', (e) => {
+        // Interaction
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragging'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
+        dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadZone.classList.add('dragover');
+            dropZone.classList.remove('dragging');
+            handleFiles(e.dataTransfer.files);
         });
 
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('dragover');
-        });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) handleFile(files[0]);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) handleFile(e.target.files[0]);
-        });
-
-        function handleFile(file) {
-            if (!file.type.startsWith('image/')) {
-                showError('Please upload a valid image file.');
-                return;
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            // Reset batch display
+            batchProgressSection.style.display = 'block';
+            gallerySection.style.display = 'block';
+            imageGallery.innerHTML = '';
+            batchResults = [];
+            hideDetail();
+            
+            const total = files.length;
+            const progressBar = document.getElementById('batchProgressBar');
+            const statusText = document.getElementById('progressStatus');
+            const percentText = document.getElementById('progressPercent');
+            
+            for (let i = 0; i < total; i++) {
+                const file = files[i];
+                statusText.innerHTML = `<span class="loading-ring"></span> Processing ${i + 1} of ${total}: ${file.name}`;
+                
+                const result = await uploadFile(file);
+                if (result) {
+                    result.fileName = file.name;
+                    batchResults.push(result);
+                    addGalleryCard(result, i);
+                }
+                
+                const pct = Math.round(((i + 1) / total) * 100);
+                progressBar.style.width = pct + '%';
+                percentText.textContent = pct + '%';
             }
-            selectedFile = file;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImage.src = e.target.result;
-                previewContainer.classList.add('active');
-                btnAnalyze.classList.add('active');
-                resultsSection.classList.remove('active');
-                errorMsg.classList.remove('active');
-            };
-            reader.readAsDataURL(file);
+            
+            statusText.textContent = `Batch processing complete. ${batchResults.length} images analyzed.`;
+            document.getElementById('galleryCount').textContent = `(${batchResults.length} items)`;
         }
 
-        function showError(msg) {
-            errorMsg.textContent = msg;
-            errorMsg.classList.add('active');
-        }
-
-        async function analyze() {
-            if (!selectedFile) return;
-
-            btnAnalyze.disabled = true;
-            btnAnalyze.textContent = 'Analyzing…';
-            spinner.classList.add('active');
-            resultsSection.classList.remove('active');
-            errorMsg.classList.remove('active');
-
+        async function uploadFile(file) {
             const formData = new FormData();
-            formData.append('image', selectedFile);
+            formData.append('image', file);
 
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
                     body: formData
                 });
-
-                const data = await response.json();
-                spinner.classList.remove('active');
-
-                if (data.error) {
-                    showError(data.error);
-                    btnAnalyze.disabled = false;
-                    btnAnalyze.textContent = '🔬 Analyze Image';
-                    return;
-                }
-
-                // Update prediction badge
-                const badge = document.getElementById('prediction-badge');
-                const isPositive = data.predicted_class === 'Positive';
-                badge.className = `prediction-badge ${isPositive ? 'positive' : 'negative'}`;
-                badge.innerHTML = `
-                    ${isPositive ? '⚠️' : '✅'}
-                    ${isPositive ? 'Positive — Ischemia Detected' : 'Negative — No Ischemia'}
-                    <span style="font-size: 0.9rem; opacity: 0.8;">(${data.confidence}%)</span>
-                `;
-
-                // Update probability bars
-                const negProb = data.probabilities['Negative'];
-                const posProb = data.probabilities['Positive'];
-                document.getElementById('prob-negative').textContent = negProb.toFixed(2) + '%';
-                document.getElementById('prob-positive').textContent = posProb.toFixed(2) + '%';
-                document.getElementById('bar-negative').style.width = negProb + '%';
-                document.getElementById('bar-positive').style.width = posProb + '%';
-
-                // Update images
-                document.getElementById('result-original').src = 'data:image/jpeg;base64,' + data.original_image;
-                document.getElementById('result-cam').src = 'data:image/jpeg;base64,' + data.cam_overlay;
-
-                resultsSection.classList.add('active');
-
+                return await response.json();
             } catch (err) {
-                spinner.classList.remove('active');
-                showError('Network error: ' + err.message);
+                console.error(err);
+                return null;
+            }
+        }
+
+        function addGalleryCard(data, index) {
+            const card = document.createElement('div');
+            card.className = 'gallery-card';
+            card.onclick = () => showDetail(index);
+            
+            card.innerHTML = `
+                <img class="gallery-thumb" src="data:image/jpeg;base64,${data.original_image}" alt="">
+                <div class="gallery-info">
+                    <div class="gallery-class">${data.predicted_class}</div>
+                    <div class="gallery-conf">${data.confidence}% confidence</div>
+                </div>
+            `;
+            imageGallery.appendChild(card);
+            
+            // Auto show first result when it arrives
+            if (index === 0) showDetail(0);
+        }
+
+        function showDetail(index) {
+            const data = batchResults[index];
+            if (!data) return;
+
+            // Highlight in gallery
+            const cards = document.querySelectorAll('.gallery-card');
+            cards.forEach((c, i) => c.classList.toggle('active', i === index));
+
+            detailSection.style.display = 'block';
+            document.getElementById('currentFileName').textContent = data.fileName;
+            document.getElementById('predClass').textContent = data.predicted_class;
+            document.getElementById('predConf').textContent = data.confidence + '%';
+            document.getElementById('origImgPreview').src = 'data:image/jpeg;base64,' + data.original_image;
+            document.getElementById('camImgPreview').src = 'data:image/jpeg;base64,' + data.cam_overlay;
+
+            // Update confidence badge color based on prediction
+            const badge = document.getElementById('predConf');
+            if (data.predicted_class === 'Positive') {
+                badge.style.background = '#C44E52';
+            } else {
+                badge.style.background = '#4C72B0';
             }
 
-            btnAnalyze.disabled = false;
-            btnAnalyze.textContent = '🔬 Analyze Image';
+            // Render probability bars
+            const probContainer = document.getElementById('probContainer');
+            probContainer.innerHTML = '<h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Probability Distribution</h3>';
+            
+            let colorIdx = 0;
+            for (const [cls, prob] of Object.entries(data.probabilities)) {
+                const color = colors[colorIdx % colors.length];
+                const item = document.createElement('div');
+                item.className = 'prob-item';
+                item.innerHTML = `
+                    <div class="prob-header">
+                        <span>${cls}</span>
+                        <span>${prob.toFixed(2)}%</span>
+                    </div>
+                    <div class="prob-bar-container">
+                        <div class="prob-bar-fill" style="width: 0%; background-color: ${color}"></div>
+                    </div>
+                `;
+                probContainer.appendChild(item);
+                setTimeout(() => item.querySelector('.prob-bar-fill').style.width = prob + '%', 50);
+                colorIdx++;
+            }
+            
+            detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+
+        function hideDetail() {
+            detailSection.style.display = 'none';
+        }
+
+        document.getElementById('closeDetail').onclick = hideDetail;
     </script>
 </body>
 </html>

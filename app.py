@@ -2,9 +2,10 @@
 app.py — Flask Web Application for CAID Coronary AI Ischemia Detector.
 
 Provides a modern web interface for:
-  - Drag-and-drop image upload
+  - Drag-and-drop batch image upload
   - Real-time classification with probability chart
   - Grad-CAM heatmap visualization
+  - Results gallery with per-image detail view
 
 Usage:
   python app.py
@@ -52,11 +53,11 @@ def load_resources():
     ckpt = torch.load(cfg.checkpoint_path, map_location=cfg.device)
     try:
         model.load_state_dict(ckpt["model_state_dict"])
-    except RuntimeError:
+    except:
         model._orig_mod.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 
-    # Find target layer for Grad-CAM
+    # Find target layer for Grad-CAM (same logic as visualize_cam.py)
     target_layer = None
     if hasattr(model, "backbone") and hasattr(model.backbone, "stages"):
         target_layer = model.backbone.stages[-1].blocks[-1]

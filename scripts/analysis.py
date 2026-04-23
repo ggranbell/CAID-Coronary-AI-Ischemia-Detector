@@ -162,7 +162,7 @@ def run_tsne(model, loader, cfg: Config, out_dir: Path, perplexity: int = 30):
 
     print(f"[analysis] Features shape: {features.shape}  Running t-SNE (perplexity={perplexity})...")
     tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42,
-                n_iter=1000, init="pca", learning_rate="auto")
+                max_iter=1000, init="pca", learning_rate="auto")
     embedded = tsne.fit_transform(features)
 
     # Plot — 2 classes: Negative and Positive
